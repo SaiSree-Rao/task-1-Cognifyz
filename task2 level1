@@ -1,0 +1,12 @@
+import pandas as pd
+# Loading  dataset into a DataFrame
+df = pd.read_csv('Dataset.csv')
+# Task 1: Identifying the city with the highest number of restaurants
+city_restaurant_counts = df['city'].value_counts()
+city_with_highest_count = city_restaurant_counts.idxmax()
+print("City with the highest number of restaurants:", city_with_highest_count)
+# Task 2: Calculating the average rating for restaurants in each city
+city_avg_ratings = df.groupby('city')['rating'].mean()
+# Task 3: Determining the city with the highest average rating
+city_with_highest_avg_rating = city_avg_ratings.idxmax()
+print("City with the highest average rating:", city_with_highest_avg_rating)
