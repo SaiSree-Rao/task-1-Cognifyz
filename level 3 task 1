@@ -1,0 +1,13 @@
+import pandas as pd
+# Loading your dataset into a DataFrame
+df = pd.read_csv('Dataset.csv')
+# Identifying the restaurants with the highest and lowest number of votes
+restaurant_with_most_votes = df.loc[df['votes'].idxmax()]
+restaurant_with_least_votes = df.loc[df['votes'].idxmin()]
+print("Restaurant with the highest number of votes:")
+print(restaurant_with_most_votes)
+print("\nRestaurant with the lowest number of votes:")
+print(restaurant_with_least_votes)
+# Analyzing correlation between number of votes and rating
+correlation = df['votes'].corr(df['rating'])
+print("\nCorrelation between number of votes and rating:", correlation)
