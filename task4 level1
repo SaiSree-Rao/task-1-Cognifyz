@@ -1,0 +1,47 @@
+import pandas as pd
+from textblob import TextBlob
+from nltk.corpus import stopwords
+from collections import Counter
+
+# Loading dataset into a DataFrame
+df = pd.read_csv('Dataset.csv')
+
+# Analyzing text reviews
+positive_keywords = []
+negative_keywords = []
+reviews = df['text_review'].dropna()  # Assuming 'text_review' is the column containing text reviews
+
+# Defining stopwords
+stop_words = set(stopwords.words('english'))
+
+# Process each review
+for review in reviews:
+    # Converting text to lowercase and tokenize
+    words = TextBlob(review.lower()).words
+    # Removing stopwords
+    filtered_words = [word for word in words if word not in stop_words]
+    # Calculating sentiment polarity of the review
+    sentiment = TextBlob(review).sentiment.polarity
+    
+    # Identifying positive and negative keywords based on sentiment polarity
+    if sentiment > 0:
+        positive_keywords.extend(filtered_words)
+    elif sentiment < 0:
+        negative_keywords.extend(filtered_words)
+
+# Counting occurrences of positive and negative keywords
+positive_keywords_count = Counter(positive_keywords)
+negative_keywords_count = Counter(negative_keywords)
+
+# Displaying the most common positive and negative keywords
+print("Most common positive keywords:", positive_keywords_count.most_common(5))
+print("Most common negative keywords:", negative_keywords_count.most_common(5))
+
+# Calculating the average length of reviews
+average_review_length = reviews.apply(lambda x: len(x)).mean()
+print("Average length of reviews:", average_review_length)
+
+# Exploring the relationship between review length and rating
+df['review_length'] = df['text_review'].str.len()  # Create a new column for review length
+correlation = df['review_length'].corr(df['rating'])
+print("Correlation between review length and rating:", correlation)
