@@ -1,0 +1,25 @@
+import pandas as pd
+from scipy.stats import chi2_contingency
+# Loading your dataset into a DataFrame
+df = pd.read_csv('Dataset.csv')
+# Creating a contingency table
+contingency_table = pd.crosstab(df['price_range'], [df['online_delivery'], df['table_booking']])
+# Performing chi-square test for independence
+chi2, p, dof, expected = chi2_contingency(contingency_table)
+# Output the chi-square statistic and p-value
+print("Chi-square statistic:", chi2)
+print("p-value:", p)
+# Determining if the p-value is less than a chosen significance level (e.g., 0.05)
+if p < 0.05:
+    print("There is a significant relationship between price range and the availability of online delivery and table booking.")
+else:
+    print("There is no significant relationship between price range and the availability of online delivery and table booking.")
+# Calculating proportions of online delivery and table booking availability by price range
+price_range_counts = df['price_range'].value_counts()
+online_delivery_proportions = df.groupby('price_range')['online_delivery'].mean()
+table_booking_proportions = df.groupby('price_range')['table_booking'].mean()
+# Output the proportions
+print("\nProportions of online delivery availability by price range:")
+print(online_delivery_proportions)
+print("\nProportions of table booking availability by price range:")
+print(table_booking_proportions)
